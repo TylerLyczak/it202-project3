@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="600" height="200" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
@@ -5,11 +13,11 @@ var game = {score: 0, lives: 1, state: "play", level: 1};
 
 var gameObjects = [];
 
-gameObjects.push({type: "player", x:20, y:c.height/2, r:5, color:"spaceship.png", speed:10, image:null, width:40, height:20});
+gameObjects.push({type: "player", x:20, y:c.height/2, r:20, color:"spaceship.png", speed:10, image:null});
 
-gameObjects.push({type: "harm", x:100, y:75, r:10, color:"red", speed:1, image:null, width:0, height:0});
+gameObjects.push({type: "harm", x:100, y:75, r:10, color:"red", speed:1, image:null});
 
-gameObjects.push({type: "benefit", x:20, y:25, r:20, color:"yellow", speed:1, image:null, width:0, height:0});
+gameObjects.push({type: "benefit", x:20, y:25, r:20, color:"yellow", speed:1, image:null});
 
 var player = gameObjects[0];
 
@@ -31,11 +39,12 @@ function draw() {
     if (g.type == "player") {
       g.image = new Image();
       g.image.src = g.color;
-      ctx.drawImage(g.image, g.x, g.y, g.width, g.height);
+      ctx.drawImage(g.image, g.x, g.y, 70, 50);
     }
     else {
       ctx.beginPath();
       ctx.arc(g.x, g.y, g.r, 0, 2 * Math.PI);
+      //ctx.stroke();
       ctx.fillStyle = g.color;
       ctx.fill();
     }
@@ -95,21 +104,19 @@ function gameOver() {
 window.requestAnimationFrame (draw);
 
 
-function colliding (player, circle) {
-  // Calculates the distance between the player and any object.
-  // Since the player is a rectange while the objects are circles,
-  // it had to be changed.
-  var distX = Math.abs(circle.x - player.x - player.width/2);
-  var distY = Math.abs(circle.y - player.y - player.height/2);
+function colliding (circle1, circle2) {
+  var result = false;
 
-  if (distX > (player.width/2 + circle.r))   { return false;}
-  if (distY > (player.height/2 + circle.r))  { return false;}
+  var dx = circle1.x - circle2.x;
+  var dy = circle1.y - circle2.y;
+  var distance = Math.sqrt(dx * dx + dy * dy);
 
-  if (distX <= (player.width/2))              { return true;}
-  if (distY <= (player.height/2))             { return true;}
+  if (distance < circle1.r + circle2.r){
+      // collision detected!
+      result = true;
+  }
 
-
-  return false;
+  return result;
 }
 
 document.onkeydown = checkKey;
@@ -136,3 +143,10 @@ function checkKey(e) {
        player.x += player.speed;
     }
 }
+
+
+
+</script>
+
+</body>
+</html>
