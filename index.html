@@ -1,11 +1,28 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Space Exploration</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <body>
 
-<canvas id="myCanvas" width="800" height="400" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
+  <h1 class="text">Welcome to Space Exploration!</h1>
+  <canvas id="myCanvas" width="800" height="400" style="border:1px solid #d3d3d3;">
+    Your browser does not support the HTML5 canvas tag.
+  </canvas>
+  <div>
+    <h3 class="text">How to play</h3>
+    <ul>
+      <li class="text">Move the spaceship with the arrow keys</li>
+      <li class="text">Hit the smile faces to increase your score</li>
+      <li class="text">Watch out for the asteroids!</li>
+      <li class="text">You have three lives, use them wisely</li>
+    </ul>
+    <button value="Refresh Page" onClick="window.location.reload()">Restart</button>
+  </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>

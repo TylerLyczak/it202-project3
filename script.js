@@ -1,26 +1,27 @@
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
-var game = {score: 0, lives: 1, state: "play", level: 1};
+var game = {score: 0, lives: 3, state: "play", level: 1};
 
 var gameObjects = [];
 
-gameObjects.push({type: "player", x:20, y:c.height/2, r:5, color:"spaceship.png", speed:10, image:null, width:40, height:20});
+gameObjects.push({type: "player", x:20, y:c.height/2, r:5, color:"images/spaceship.png", speed:5, image:null, width:40, height:20});
 
-gameObjects.push({type: "harm", x:100, y:75, r:25, color:"asteroid.png", speed:1, image:null, width:0, height:0});
+gameObjects.push({type: "harm", x:100, y:75, r:25, color:"images/asteroid.png", speed:1, image:null, width:0, height:0});
 
-gameObjects.push({type: "benefit", x:20, y:25, r:50, color:"smile.png", speed:1, image:null, width:0, height:0});
+gameObjects.push({type: "benefit", x:20, y:25, r:50, color:"images/smile.png", speed:1, image:null, width:0, height:0});
 
 var player = gameObjects[0];
 
 var backgroundImg = new Image();
-backgroundImg.src = "space.jpg";
+backgroundImg.src = "images/space.jpg";
 
 ctx.font = "30px Comic Sans MS";
 ctx.fillStyle = "red";
 ctx.textAlign = "center";
 
 function draw() {
+  move();
   // clear canvas
   ctx.clearRect(0,0,c.width, c.height);
   ctx.drawImage(backgroundImg, 0, 0);
@@ -34,9 +35,10 @@ function draw() {
       ctx.drawImage(g.image, g.x, g.y, g.width, g.height);
     }
     else {
+      ctx.beginPath();
       g.image = new Image();
       g.image.src = g.color;
-      ctx.drawImage(g.image, g.x, g.y, g.r, g.r);
+      ctx.drawImage(g.image, g.x-(g.r), g.y-(g.r), g.r*2, g.r*2);
     }
 
     if (g.type != "player") {
@@ -53,7 +55,7 @@ function draw() {
             game.level ++;
 
             if (game.level % 2 == 0) {
-                gameObjects.push({type: "harm", x:100, y:75, r:25, color:"asteroid.png", speed:1, image:null, width:0, height:0});
+                gameObjects.push({type: "harm", x:100, y:75, r:25, color:"images/asteroid.png", speed:1, image:null, width:0, height:0});
             }
           }
         }
@@ -88,6 +90,7 @@ function gameOver() {
   ctx.clearRect(0,0,c.width, c.height);
   ctx.drawImage(backgroundImg, 0, 0);
   ctx.fillText("Game Over", c.width/2, c.height/2);
+  ctx.fillText("Score: " + game.score, c.width/2, c.height/2+30);
 }
 
 
@@ -121,27 +124,37 @@ function colliding (player, circle) {
   return false;
 }
 
-document.onkeydown = checkKey;
+// Fluid move functions that allows the player to move
+var LEFT = false;
+var RIGHT = false;
+var UP = false;
+var DOWN = false;
 
-function checkKey(e) {
+function move() {
+  if (LEFT)  {
+    player.x -= player.speed;
+  }
+  if (RIGHT)  {
+    player.x += player.speed;
+  }
+  if (UP) {
+    player.y -= player.speed;
+  }
+  if (DOWN) {
+    player.y += player.speed;
+  }
+}
 
-    e = e || window.event;
+document.onkeydown = function(e)  {
+  if (e.keyCode == 37)  LEFT = true;
+  if (e.keyCode == 39)  RIGHT = true;
+  if (e.keyCode == 38)  UP = true;
+  if (e.keyCode == 40)  DOWN = true;
+}
 
-    // console.log(e);
-    if (e.keyCode == '38') {
-        // up arrow
-        player.y -= player.speed;
-    }
-    else if (e.keyCode == '40') {
-        // down arrow
-        player.y += player.speed;
-    }
-    else if (e.keyCode == '37') {
-       // left arrow
-       player.x -= player.speed;
-    }
-    else if (e.keyCode == '39') {
-       // right arrow
-       player.x += player.speed;
-    }
+document.onkeyup = function(e)  {
+  if (e.keyCode == 37)  LEFT = false;
+  if (e.keyCode == 39)  RIGHT = false;
+  if (e.keyCode == 38)  UP = false;
+  if (e.keyCode == 40)  DOWN = false;
 }
