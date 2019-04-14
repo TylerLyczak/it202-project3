@@ -7,9 +7,9 @@ var gameObjects = [];
 
 gameObjects.push({type: "player", x:20, y:c.height/2, r:5, color:"spaceship.png", speed:10, image:null, width:40, height:20});
 
-gameObjects.push({type: "harm", x:100, y:75, r:10, color:"red", speed:1, image:null, width:0, height:0});
+gameObjects.push({type: "harm", x:100, y:75, r:25, color:"asteroid.png", speed:1, image:null, width:0, height:0});
 
-gameObjects.push({type: "benefit", x:20, y:25, r:20, color:"yellow", speed:1, image:null, width:0, height:0});
+gameObjects.push({type: "benefit", x:20, y:25, r:50, color:"smile.png", speed:1, image:null, width:0, height:0});
 
 var player = gameObjects[0];
 
@@ -34,10 +34,9 @@ function draw() {
       ctx.drawImage(g.image, g.x, g.y, g.width, g.height);
     }
     else {
-      ctx.beginPath();
-      ctx.arc(g.x, g.y, g.r, 0, 2 * Math.PI);
-      ctx.fillStyle = g.color;
-      ctx.fill();
+      g.image = new Image();
+      g.image.src = g.color;
+      ctx.drawImage(g.image, g.x, g.y, g.r, g.r);
     }
 
     if (g.type != "player") {
@@ -54,7 +53,7 @@ function draw() {
             game.level ++;
 
             if (game.level % 2 == 0) {
-                gameObjects.push({type: "harm", x:100, y:75, r:10, color:"red", speed:1});
+                gameObjects.push({type: "harm", x:100, y:75, r:25, color:"asteroid.png", speed:1, image:null, width:0, height:0});
             }
           }
         }
@@ -105,8 +104,18 @@ function colliding (player, circle) {
   if (distX > (player.width/2 + circle.r))   { return false;}
   if (distY > (player.height/2 + circle.r))  { return false;}
 
-  if (distX <= (player.width/2))              { return true;}
-  if (distY <= (player.height/2))             { return true;}
+  if (distX <= (player.width/2))              {
+    console.log("distX: " + distX);
+    console.log("circle.x: " + circle.x);
+    console.log("player.x: " + player.x);
+    console.log("player.width/2: " + player.width/2);
+    return true;}
+  if (distY <= (player.height/2))             {
+    console.log("distY: " + distY);
+    console.log("circle.y: " + circle.y);
+    console.log("player.y: " + player.y);
+    console.log("player.height/2: " + player.height/2);
+    return true;}
 
 
   return false;
